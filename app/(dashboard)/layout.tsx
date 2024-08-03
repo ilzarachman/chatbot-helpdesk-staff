@@ -28,7 +28,11 @@ const navbarItems = [
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-    const [navActive, setNavActive] = React.useState(window.location.pathname)
+    const [navActive, setNavActive] = React.useState("")
+
+    React.useEffect(() => {
+        setNavActive(window.location.pathname)
+    }, [])
 
     return (
         <div className="h-svh w-svw flex bg-background justify-between flex-shrink-0">
@@ -77,7 +81,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
             </div>
 
-            <div className="vertical-line h-full w-[1px] bg-slate-200"></div>
+            <div className="vertical-line h-full w-[1px] bg-slate-900"></div>
 
             <div className="h-svh flex-grow flex-shrink overflow-hidden">
                 <div className="p-6">{children}</div>
