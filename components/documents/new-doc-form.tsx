@@ -28,8 +28,13 @@ import {
 } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { DialogFooter } from "@/components/ui/dialog"
-import { Check, CheckIcon, ChevronsUpDown } from "lucide-react"
+import { Check, CheckIcon, ChevronsUpDown, LoaderCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Checkbox } from "../ui/checkbox"
+import Link from "next/link"
+import { fetchAPI } from "@/lib/utils"
+import React from "react"
+
 
 const formSchema = z.object({
     name: z.string({
@@ -38,9 +43,10 @@ const formSchema = z.object({
     intent: z.string({
         required_error: "Intent is required",
     }),
-    public: z.boolean({
-        required_error: "Public is required",
+    document_file: z.unknown().refine((file) => file instanceof FileList, {
+        message: "File is required",
     }),
+    public: z.boolean().default(false),
 })
 
 const intents = [
@@ -50,16 +56,43 @@ const intents = [
     { label: "Other", value: "other" }
 ] as const
 
+export default function NewDocumentForm({setOpen}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
+    const [loadingUpload, setLoadingUpload] = React.useState(false)
 
-export default function NewDocumentForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
 
+    const fileRef = form.register("document_file");
+
+    function formSubmitRequest(values: z.infer<typeof formSchema>) {
+        setLoadingUpload(true)
+
+        const formData = new FormData()
+        formData.append("name", values.name)
+        formData.append("intent", values.intent)
+        formData.append("public", String(values.public))
+        formData.append("document_file", values.document_file[0])
+
+        fetchAPI("/document/upload", {
+            method: "POST",
+            credentials: "include",
+            body: formData,
+        }).then((res) => {
+            if (res.ok) {
+                console.log("success")
+                setLoadingUpload(false)
+                setOpen(false)
+            }
+        }).catch((err) => {
+            console.log(err)
+            setLoadingUpload(false)
+        })
+    }
+
+
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+        formSubmitRequest(values)
     }
 
 
@@ -143,8 +176,45 @@ export default function NewDocumentForm() {
                     )}
                 />
 
+                <FormField
+                    control={form.control}
+                    name="document_file"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Document File</FormLabel>
+                            <FormControl>
+                                <Input type="file" {...fileRef} accept="application/pdf,text/plain" />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="public"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                                <FormLabel>
+                                    Buat dokumen ini publik
+                                </FormLabel>
+                                <FormDescription>
+                                    Dokumen ini dapat diakses oleh siapa saja
+                                </FormDescription>
+                            </div>
+                        </FormItem>
+                    )}
+                />
+
                 <DialogFooter>
-                    <Button type="submit">Save changes</Button>
+                    <Button type="submit" disabled={loadingUpload}>Save changes {loadingUpload ? <LoaderCircle className="ml-2 h-4 w-4 animate-spin" /> : ""}</Button>
                 </DialogFooter>
             </form>
         </Form>
