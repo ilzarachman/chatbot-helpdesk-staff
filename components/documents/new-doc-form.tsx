@@ -34,6 +34,7 @@ import { Checkbox } from "../ui/checkbox"
 import Link from "next/link"
 import { fetchAPI } from "@/lib/utils"
 import React from "react"
+import { useToast } from "@/components/ui/use-toast"
 
 
 const formSchema = z.object({
@@ -58,6 +59,7 @@ const intents = [
 
 export default function NewDocumentForm({setOpen}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
     const [loadingUpload, setLoadingUpload] = React.useState(false)
+    const { toast } = useToast()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -80,7 +82,11 @@ export default function NewDocumentForm({setOpen}: {setOpen: React.Dispatch<Reac
             body: formData,
         }).then((res) => {
             if (res.ok) {
-                console.log("success")
+                toast({
+                    title: "Document uploaded successfully!",
+                    description: "Document will be processed to be stored inside embeddings database.",
+                    variant: "default",
+                })
                 setLoadingUpload(false)
                 setOpen(false)
             }
