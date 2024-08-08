@@ -35,6 +35,7 @@ import Link from "next/link"
 import { fetchAPI } from "@/lib/utils"
 import React from "react"
 import { useToast } from "@/components/ui/use-toast"
+import { DocumentsContext } from "@/lib/contexts/documents-context"
 
 
 const formSchema = z.object({
@@ -57,7 +58,10 @@ const intents = [
     { label: "Other", value: "other" }
 ] as const
 
-export default function NewDocumentForm({setOpen}: {setOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
+export default function NewDocumentForm({ setOpen }: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+
+    const { getData } = React.useContext(DocumentsContext)
+
     const [loadingUpload, setLoadingUpload] = React.useState(false)
     const { toast } = useToast()
 
@@ -89,6 +93,7 @@ export default function NewDocumentForm({setOpen}: {setOpen: React.Dispatch<Reac
                 })
                 setLoadingUpload(false)
                 setOpen(false)
+                getData()
             }
         }).catch((err) => {
             console.log(err)
