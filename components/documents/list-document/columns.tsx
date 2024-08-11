@@ -21,6 +21,7 @@ import { ArrowUpDown } from "lucide-react"
 export type Document = {
     uuid: string
     name: string
+    staff_email: string
     intent: string
     public: boolean
     embedded: boolean
@@ -44,6 +45,23 @@ export const columns: ColumnDef<Document>[] = [
                 </div>
             )
         },
+    },
+    {
+        accessorKey: "staff_email",
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center">
+                    Uploader
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="ml-2 p-1"
+                    >
+                        <ArrowUpDown className="h-3 w-3" />
+                    </Button>
+                </div>
+            )
+        }
     },
     {
         accessorKey: "intent",
