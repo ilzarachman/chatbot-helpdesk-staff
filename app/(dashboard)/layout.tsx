@@ -94,7 +94,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 <div className="vertical-line h-full w-[1px] bg-slate-900"></div>
 
-                <div className="h-svh flex-grow flex-shrink overflow-hidden">
+                <div className="h-svh flex-grow flex-shrink overflow-auto">
                     <div className="p-6">{children}</div>
                 </div>
             </div>
