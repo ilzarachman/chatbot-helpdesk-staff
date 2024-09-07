@@ -17,7 +17,6 @@ export default function Documents() {
             if (res.ok) {
                 res.json().then((data) => {
                     setDocuments(data.data)
-                    console.log(data.data)
                 })
             }
         })

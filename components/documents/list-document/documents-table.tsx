@@ -13,6 +13,12 @@ export default function DocumentsTable() {
 
     React.useEffect(() => {
         getData()
+
+        const interval = setInterval(() => {
+            getData()
+        }, 1000)
+        
+        return () => clearInterval(interval)
     }, [])
 
     return (
