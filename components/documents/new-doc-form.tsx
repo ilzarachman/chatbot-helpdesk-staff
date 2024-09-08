@@ -65,7 +65,7 @@ export default function NewDocumentForm({
 }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { getData } = React.useContext(DocumentsContext);
+  const { data, getData } = React.useContext(DocumentsContext);
 
   const [loadingUpload, setLoadingUpload] = React.useState(false);
   const { toast } = useToast();
@@ -240,7 +240,7 @@ export default function NewDocumentForm({
                 <Input
                   type="file"
                   {...fileRef}
-                  accept="application/pdf,text/plain"
+                  accept="application/pdf,text/plain,text/csv,application/docx,application/doc"
                 />
               </FormControl>
               <FormMessage />

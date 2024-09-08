@@ -1,6 +1,6 @@
 "use client";
 
-import { BookText, Home, FileQuestion, FileClock } from "lucide-react";
+import { BookText, Home, FileQuestion, FileClock, PersonStanding } from "lucide-react";
 import Link from "next/link";
 import NavItem from "@/components/sidebar/nav-item";
 import React from "react";
@@ -32,6 +32,13 @@ const navbarItems = [
     title: "Logs",
     href: "/logs",
     Icon: FileClock,
+  },
+
+  {
+    id: "students",
+    title: "Students",
+    href: "/students",
+    Icon: PersonStanding,
   },
 ];
 

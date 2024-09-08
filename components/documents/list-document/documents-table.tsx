@@ -13,7 +13,7 @@ export default function DocumentsTable() {
 
     React.useEffect(() => {
         getData()
-
+        
         const interval = setInterval(() => {
             getData()
         }, 1000)
@@ -23,7 +23,7 @@ export default function DocumentsTable() {
 
     return (
         <div className="my-4 max-w-[1280px]">
-            <DataTable columns={columns} data={data} filterColumn="name" filterColumnPlaceholder="Filter name/title..."/>
+            <DataTable columns={columns} data={data} filterColumn="name" filterColumnPlaceholder="Filter name/title..." paginate={false}/>
         </div>
     )
 }
