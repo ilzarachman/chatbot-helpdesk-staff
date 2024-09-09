@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { fetchAPI } from "@/lib/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -32,12 +33,22 @@ const intentsComp = (intent: string) => {
   switch (intent) {
     case "academic_administration_info":
       return (
-        <Badge variant="default" className="bg-green-200">Academic and Administration Information</Badge>
+        <Badge variant="default" className="bg-green-200">
+          Academic and Administration Information
+        </Badge>
       );
     case "resource_service_info":
-      return <Badge variant="default" className="bg-blue-200">Resource and Service Information</Badge>;
+      return (
+        <Badge variant="default" className="bg-blue-200">
+          Resource and Service Information
+        </Badge>
+      );
     case "need_assistant_support":
-      return <Badge variant="default" className="bg-red-200">Need Assistant Support</Badge>;
+      return (
+        <Badge variant="default" className="bg-red-200">
+          Need Assistant Support
+        </Badge>
+      );
     case "other":
       return <Badge variant="default">Other</Badge>;
     default:
@@ -226,7 +237,7 @@ export const columns: ColumnDef<Document>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const document = row.original;
 
       return (
         <DropdownMenu>
@@ -239,8 +250,17 @@ export const columns: ColumnDef<Document>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => {}}
-              className="cursor-pointer text-slate-700"
+              onClick={() => {
+                fetchAPI(`/document/${document.document_uuid}`, {
+                  method: "DELETE",
+                  credentials: "include",
+                }).then((res) => {
+                  if (res.ok) {
+                    window.location.reload();
+                  }
+                });
+              }}
+              className="cursor-pointer text-red-400"
             >
               Delete
             </DropdownMenuItem>
