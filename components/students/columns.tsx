@@ -27,6 +27,7 @@ import React from "react";
 import { Log } from "@/lib/contexts/logs-context";
 import { Badge } from "@/components/ui/badge";
 import { Student } from "@/lib/contexts/students-context";
+import { fetchAPI } from "@/lib/utils";
 
 export const columns: ColumnDef<Student>[] = [
   {
@@ -125,6 +126,42 @@ export const columns: ColumnDef<Student>[] = [
         hour: "numeric",
         minute: "numeric",
       });
+    },
+  },
+
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      // Delete button
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => {
+                fetchAPI(`/student/delete/${row.original.id}`, {
+                  method: "DELETE",
+                  credentials: "include",
+                }).then((res) => {
+                  if (res.ok) {
+                    window.location.reload();
+                  }
+                });
+              }}
+              className="cursor-pointer text-red-400"
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];
