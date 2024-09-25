@@ -16,6 +16,7 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { fetchAPI } from "@/lib/utils";
+import Link from "next/link";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -71,6 +72,20 @@ export const columns: ColumnDef<Document>[] = [
             <ArrowUpDown className="h-3 w-3" />
           </Button>
         </div>
+      );
+    },
+    cell: ({ row, getValue }) => {
+      // Get document_uuid from row data
+      const document_uuid = row.original.document_uuid;
+
+      return (
+        <Link
+          href={`${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/${document_uuid}`}
+          target="_blank"
+          className="hover:underline"
+        >
+          {getValue() as string}
+        </Link>
       );
     },
   },
