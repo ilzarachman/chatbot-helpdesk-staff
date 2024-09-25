@@ -80,7 +80,9 @@ export const columns: ColumnDef<Document>[] = [
 
       return (
         <Link
-          href={`${process.env.NEXT_PUBLIC_API_URL}/api/v1/document/${document_uuid}`}
+          href={`${
+            process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+          }/api/v1/document/${document_uuid}`}
           target="_blank"
           className="hover:underline"
         >
